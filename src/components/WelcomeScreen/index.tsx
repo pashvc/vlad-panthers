@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 export const WelcomeScreen = ({ onStart, loading }: { onStart: () => void, loading: boolean }) => {
   const [isCalendlyRedirect, setIsCalendlyRedirect] = useState(false);
+  const calendlyUrl = "https://calendly.com/vlad-ai-netevia/30min";
   
   useEffect(() => {
     // Check if the URL has the r=calendly parameter
@@ -14,15 +15,25 @@ export const WelcomeScreen = ({ onStart, loading }: { onStart: () => void, loadi
   return (
     <div className='flex flex-col items-center justify-center h-screen gap-8 p-10 text-center'>
       {!isCalendlyRedirect && (
-        <div className='bg-white p-4 rounded-xl shadow-lg'>
-          <QRCodeSVG
-            value="https://calendly.com/vlad-ai-netevia/30min"
-            size={200}
-            level="H"
-            includeMargin={true}
-            className="mx-auto"
-          />
-        </div>
+        <>
+          <div className='bg-white p-4 rounded-xl shadow-lg'>
+            <QRCodeSVG
+              value={calendlyUrl}
+              size={200}
+              level="H"
+              includeMargin={true}
+              className="mx-auto"
+            />
+          </div>
+          <a 
+            href={calendlyUrl} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 hover:underline font-medium text-lg"
+          >
+            Book a Meeting with Vlad AI
+          </a>
+        </>
       )}
       <h1 className='text-4xl font-bold'>
         Vlad Sadovskiy AI Avatar
