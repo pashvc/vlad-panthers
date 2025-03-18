@@ -1,18 +1,29 @@
 import { QRCodeSVG } from 'qrcode.react';
 import { Button } from '../ui/button';
+import { useEffect, useState } from 'react';
 
 export const WelcomeScreen = ({ onStart, loading }: { onStart: () => void, loading: boolean }) => {
+  const [isCalendlyRedirect, setIsCalendlyRedirect] = useState(false);
+  
+  useEffect(() => {
+    // Check if the URL has the r=calendly parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    setIsCalendlyRedirect(urlParams.get('r') === 'calendly');
+  }, []);
+
   return (
     <div className='flex flex-col items-center justify-center h-screen gap-8 p-10 text-center'>
-      <div className='bg-white p-4 rounded-xl shadow-lg'>
-        <QRCodeSVG
-          value="https://vlad-netevia.pages.dev/"
-          size={200}
-          level="H"
-          includeMargin={true}
-          className="mx-auto"
-        />
-      </div>
+      {!isCalendlyRedirect && (
+        <div className='bg-white p-4 rounded-xl shadow-lg'>
+          <QRCodeSVG
+            value="https://calendly.com/vlad-ai-netevia/30min"
+            size={200}
+            level="H"
+            includeMargin={true}
+            className="mx-auto"
+          />
+        </div>
+      )}
       <h1 className='text-4xl font-bold'>
         Vlad Sadovskiy AI Avatar
       </h1>
@@ -23,9 +34,11 @@ export const WelcomeScreen = ({ onStart, loading }: { onStart: () => void, loadi
         Welcome to a conversation with Vlad Sadovskiy's personal AI avatar, specially crafted by Pavel Sukhachev in Miami, FL.
         Experience interactive discussions about payments, entrepreneurship, and business insights.
       </p>
-      <Button onClick={onStart} className='mt-4'>
-        {loading ? 'Loading...' : 'Start Conversation'}
-      </Button>
+      {isCalendlyRedirect && (
+        <Button onClick={onStart} className='mt-4'>
+          {loading ? 'Loading...' : 'Start Conversation'}
+        </Button>
+      )}
     </div>
   );
 };
