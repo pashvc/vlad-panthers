@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DailyAudio, useParticipantIds, useLocalSessionId } from '@daily-co/daily-react';
 import { Minimize, Maximize } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -9,11 +9,30 @@ export const Call = () => {
   const remoteParticipantIds = useParticipantIds({ filter: 'remote' });
   const localSessionId = useLocalSessionId();
   const [mode, setMode] = useState<'full' | 'minimal'>('full');
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleToggleMode = () => {
     setMode(prev => prev === 'full' ? 'minimal' : 'full');
   }
+
+  // Calculate logo size based on screen width
+  const getLogoSize = () => {
+    if (mode === 'minimal') return 'w-20';
+    
+    if (windowWidth < 480) return 'w-20'; // Mobile
+    if (windowWidth < 768) return 'w-24'; // Small tablets
+    if (windowWidth < 1024) return 'w-32'; // Larger tablets
+    return 'w-40'; // Desktop
+  };
 
   return <>
     <div className={cn("flex items-center justify-center", {
@@ -26,24 +45,14 @@ export const Call = () => {
         </Button>
         {
           remoteParticipantIds.length > 0 ? (
-            <div className="relative">
-              {/* Top left logo overlay */}
-              <img 
-                src="/Florida_Panthers.JPG.webp" 
-                alt="Florida Panthers Logo" 
-                className={cn("absolute z-10 rounded-md", {
-                  'w-40 h-auto top-[30%] left-4': mode === 'full',
-                  'w-24 h-auto top-[30%] left-2': mode === 'minimal',
-                })}
-              />
-              
-              {/* Top right logo overlay */}
+            <div className="relative">              
+              {/* Right logo overlay */}
               <img 
                 src="/fla.png" 
                 alt="FLA Logo" 
-                className={cn("absolute z-10 rounded-md", {
-                  'w-40 h-auto top-[30%] right-4': mode === 'full',
-                  'w-24 h-auto top-[30%] right-2': mode === 'minimal',
+                className={cn("absolute z-10 rounded-md", getLogoSize(), {
+                  'top-[30%] right-4': mode === 'full',
+                  'top-[30%] right-2': mode === 'minimal',
                 })}
               />
               
