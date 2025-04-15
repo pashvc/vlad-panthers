@@ -39,11 +39,11 @@ export const WelcomeScreen = ({ onStart, loading }: { onStart: () => void, loadi
         Vlad Sadovskiy AI Avatar
       </h1>
       <h2 className='text-2xl'>
-        CEO of Netevia
+        CEO of Netevia & Florida Panthers Fan
       </h2>
       <p className='text-gray-600 max-w-2xl'>
         Welcome to a conversation with Vlad Sadovskiy's personal AI avatar, specially crafted by Pavel Sukhachev in Miami, FL.
-        Experience interactive discussions about payments, entrepreneurship, and business insights.
+        Chat about payments, entrepreneurship, and Florida Panthers hockey stats and insights.
       </p>
       {isCalendlyRedirect && (
         <Button onClick={onStart} className='mt-4'>

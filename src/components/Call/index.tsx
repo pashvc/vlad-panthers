@@ -25,19 +25,43 @@ export const Call = () => {
           {mode === 'full' ? <Minimize className='size-4' /> : <Maximize className='size-4' />}
         </Button>
         {
-          remoteParticipantIds.length > 0 ?
-            <Video
-              id={remoteParticipantIds[0]}
-              className={
-                cn({
-                  'max-h-[50vh] min-h-[20rem]': mode === 'full',
-                  'max-h-[15rem]': mode === 'minimal',
-                })
-              }
-            /> :
+          remoteParticipantIds.length > 0 ? (
+            <div className="relative">
+              {/* Top left logo overlay */}
+              <img 
+                src="/Florida_Panthers.JPG.webp" 
+                alt="Florida Panthers Logo" 
+                className={cn("absolute z-10 rounded-md", {
+                  'w-40 h-auto top-[30%] left-4': mode === 'full',
+                  'w-24 h-auto top-[30%] left-2': mode === 'minimal',
+                })}
+              />
+              
+              {/* Top right logo overlay */}
+              <img 
+                src="/fla.png" 
+                alt="FLA Logo" 
+                className={cn("absolute z-10 rounded-md", {
+                  'w-40 h-auto top-[30%] right-4': mode === 'full',
+                  'w-24 h-auto top-[30%] right-2': mode === 'minimal',
+                })}
+              />
+              
+              <Video
+                id={remoteParticipantIds[0]}
+                className={
+                  cn({
+                    'max-h-[50vh] min-h-[20rem]': mode === 'full',
+                    'max-h-[15rem]': mode === 'minimal',
+                  })
+                }
+              />
+            </div>
+          ) : (
             <div className='relative flex items-center justify-center size-[50vh]'>
               <p className='text-2xl text-black'>Waiting for others to join...</p>
             </div>
+          )
         }
         {localSessionId && (
           <Video
